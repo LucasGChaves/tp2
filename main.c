@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <time.h>
 
 unsigned long int frameSize = 0;
 unsigned long int memorySize = 0;
@@ -28,7 +29,7 @@ char *concat(const char *s1, const char *s2)
     return result;
 }
 
-long int getAddrOffset(long int pageSizeInByte)
+unsigned long int getAddrOffset(long int pageSizeInByte)
 {
     long int tmp = pageSizeInByte;
     long int offset = 0;
@@ -51,9 +52,9 @@ void initializePageTable(PageTableEntry* pageTable, unsigned long int* freeFrame
     }
 }
 
-long int findPageWithLru(PageTableEntry* pageTable) {
+unsigned long int findPageWithLru(PageTableEntry* pageTable) {
     unsigned long int lruPage = -1;
-    unsigned long int minTimestamp = INT_MAX;
+    unsigned long int minTimestamp = LONG_MAX;
 
     for (unsigned long int i = 0; i < pageTableSize; i++) {
         if (pageTable[i].valid && pageTable[i].lastAccess < minTimestamp) {
@@ -64,20 +65,19 @@ long int findPageWithLru(PageTableEntry* pageTable) {
     return lruPage;
 }
 
-int processReplacement(PageTableEntry* pageTable, char* algorithm) {
+unsigned long int processReplacement(PageTableEntry* pageTable, char* algorithm) {
     if(strcmp(algorithm, "lru") == 0) {
         return findPageWithLru(pageTable);
     }
 }
 
 
-long int translateAddress(PageTableEntry* pageTable, long int offset, unsigned long int virtualAddress, unsigned long int* freeFrames, char* algorithm) {
+unsigned long int translateAddress(PageTableEntry* pageTable, long int offset, unsigned long int virtualAddress, unsigned long int* freeFrames, char* algorithm) {
     unsigned long int pageNumber = virtualAddress >> offset;
     globalTimestamp++;
-    //printf("CALLING translateAddress -> address: %x(%ld) / pageNumber: %ld / valid: %d / lastAccess: %d / frameNumber: %d\n", virtualAddress, virtualAddress, pageNumber, pageTable[pageNumber].valid, pageTable[pageNumber].lastAccess, pageTable[pageNumber].frameNumber);
     if (pageTable[pageNumber].valid) {
         pageTable[pageNumber].lastAccess = globalTimestamp;
-        return pageTable[pageNumber].frameNumber * frameSize + offset;
+        return pageTable[pageNumber].frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1));
     } else {
         //Page fault
         pageFaultsCount++;
@@ -101,8 +101,7 @@ long int translateAddress(PageTableEntry* pageTable, long int offset, unsigned l
         pageTable[pageNumber].frameNumber = frameNumber;
         pageTable[pageNumber].valid = 1;
         pageTable[pageNumber].lastAccess = globalTimestamp;
-        //printf("pageNumber: %ld / valid: %d / freeNumber: %d\n",  pageNumber, pageTable[pageNumber].valid, pageTable[pageNumber].frameNumber);
-        return pageTable[pageNumber].frameNumber * frameSize + offset;
+        return pageTable[pageNumber].frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1));
     }
 }
 
@@ -167,6 +166,7 @@ void printRelatory(char* algorithm, char* fileName) {
 
 int main(int argc, char *argv[])
 {
+    clock_t begin = clock();
     if (argc != 5)
     {
         printf("Usage: %s <algorithm> <file> <frame_size> <memory_size>\n", argv[0]);
@@ -212,4 +212,7 @@ int main(int argc, char *argv[])
     free(pageTable);
     free(memory);
     free(freeFrames);
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("Execution time in seconds: %f\n", time_spent);
 }
