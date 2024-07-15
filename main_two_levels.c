@@ -5,6 +5,7 @@
 #include <time.h>
 #include "two_levels_structs.h"
 #include "lru_two_levels.h"
+#include "common.h"
 
 unsigned long int frameSize = 0;
 unsigned long int memorySize = 0;
@@ -14,32 +15,10 @@ unsigned long int firstLevelTableSize = 0;
 unsigned long int secondLevelTableSize = 0;
 unsigned long int globalTimestamp = 0;
 unsigned long int numFreeFrames = 0;
-unsigned int readCount = 0;
-unsigned int writeCount = 0;
-unsigned int pageFaultsCount = 0;
-unsigned int replacetamentsCount = 0;
-
-
-
-char *concat(const char *s1, const char *s2)
-{
-    char *result = malloc(strlen(s1) + strlen(s2) + 1);
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
-}
-
-unsigned long int getAddrOffset(long int pageSizeInByte)
-{
-    long int tmp = pageSizeInByte;
-    long int offset = 0;
-    while (tmp > 1)
-    {
-        tmp = tmp >> 1;
-        offset++;
-    }
-    return offset;
-}
+unsigned long int readCount = 0;
+unsigned long int writeCount = 0;
+unsigned long int pageFaultsCount = 0;
+unsigned long int replacetamentsCount = 0;
 
 void initializePageTable(PageTableEntry* pageTable, unsigned long int* freeFrames) {
     for (unsigned long int i = 0; i < pageTableSize; i++) {
@@ -71,7 +50,7 @@ void initializeFirstLevelPageTable(FirstLevelPageTable* firstLevelPageTable, uns
     }
 }
 
-unsigned long int processReplacement(FirstLevelPageTable* firstLevelPageTable, char* algorithm, long int* result) {
+void processReplacement(FirstLevelPageTable* firstLevelPageTable, char* algorithm, long int* result) {
     if(strcmp(algorithm, "lru") == 0) {
         findPageWithLru(firstLevelPageTable, firstLevelTableSize, secondLevelTableSize, result);
     }
@@ -96,7 +75,7 @@ unsigned long int translateAddress(FirstLevelPageTable* firstLevelPageTable, uns
         } else {
             //replacement
             replacetamentsCount++;
-            long int *result = (unsigned long int*) malloc(sizeof(unsigned long int) * 2); 
+            long int *result = (long int*) malloc(sizeof(long int) * 2); 
             result[0] = -1;
             result[1] = -1;
             processReplacement(firstLevelPageTable, algorithm, result);
@@ -168,17 +147,6 @@ void processLog(FirstLevelPageTable* firstLevelPageTable, unsigned long int leve
     fclose(file);
 }
 
-void printRelatory(char* algorithm, char* fileName) {
-    printf("Executing file %s...\n", fileName);
-    printf("Memory size (in bytes): %ld\n", memorySize);
-    printf("Frame size (in bytes): %ld\n", frameSize);
-    printf("Replacement algorithm: %s\n", algorithm);
-    printf("Pages read: %ld\n", readCount);
-    printf("Pages written: %ld\n", writeCount);
-    printf("Page faults: %ld\n", pageFaultsCount);
-    printf("Page replacements: %ld\n", replacetamentsCount);
-}
-
 int main(int argc, char *argv[])
 {
     clock_t begin = clock();
@@ -222,7 +190,7 @@ int main(int argc, char *argv[])
 
     processLog(firstLevelPageTable, levelOffset, offset, freeFrames, memory, algorithm, filename);
 
-    printRelatory(algorithm, filename);
+    printRelatory(algorithm, filename, memorySize, frameSize, readCount, writeCount, pageFaultsCount, replacetamentsCount);
 
     for (unsigned long int i = 0; i < firstLevelTableSize; i++) {
         free(firstLevelPageTable->entries[i]->entries);

@@ -4,7 +4,6 @@
 #include <stdlib.h>
 
 void findPageWithLru(FirstLevelPageTable* firstLevelPageTable, unsigned long int numFirstLevelEntries, unsigned long int numSecondLevelEntries, long int* result) {
-    unsigned long int lruPage = -1;
     unsigned long int minTimestamp = ULONG_MAX;
     unsigned long int firstLevelIndex = 0, secondLevelIndex = 0;
     for (unsigned long int i = 0; i < numFirstLevelEntries; i++) {

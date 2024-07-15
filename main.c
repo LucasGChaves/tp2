@@ -8,6 +8,7 @@
 #include "random.h"
 #include "second_chance.h"
 #include "fifo.h"
+#include "common.h"
 
 unsigned long int frameSize = 0;
 unsigned long int memorySize = 0;
@@ -19,26 +20,6 @@ unsigned long int readCount = 0;
 unsigned long int writeCount = 0;
 unsigned long int pageFaultsCount = 0;
 unsigned long int replacetamentsCount = 0;
-
-char *concat(const char *s1, const char *s2)
-{
-    char *result = malloc(strlen(s1) + strlen(s2) + 1);
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
-}
-
-unsigned long int getAddrOffset(long int pageSizeInByte)
-{
-    long int tmp = pageSizeInByte;
-    long int offset = 0;
-    while (tmp > 1)
-    {
-        tmp = tmp >> 1;
-        offset++;
-    }
-    return offset;
-}
 
 void initializePageTable(PageTableEntry *pageTable, unsigned long int *freeFrames)
 {
@@ -209,17 +190,6 @@ void processLog(PageTableEntry *pageTable, unsigned long int offset, unsigned lo
     fclose(file);
 }
 
-void printRelatory(char* algorithm, char* fileName) {
-    printf("Executing file %s...\n", fileName);
-    printf("Memory size (in bytes): %lu\n", memorySize);
-    printf("Frame size (in bytes): %lu\n", frameSize);
-    printf("Replacement algorithm: %s\n", algorithm);
-    printf("Pages read: %lu\n", readCount);
-    printf("Pages written: %lu\n", writeCount);
-    printf("Page faults: %lu\n", pageFaultsCount);
-    printf("Page replacements: %lu\n", replacetamentsCount);
-}
-
 int main(int argc, char *argv[])
 {
     clock_t begin = clock();
@@ -260,7 +230,7 @@ int main(int argc, char *argv[])
 
     processLog(pageTable, offsetInBits, freeFrames, memory, algorithm, filename);
 
-    printRelatory(algorithm, filename);
+    printRelatory(algorithm, filename, memorySize, frameSize, readCount, writeCount, pageFaultsCount, replacetamentsCount);
 
     free(pageTable);
     free(memory);
