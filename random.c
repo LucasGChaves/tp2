@@ -1,7 +1,7 @@
 #include "random.h"
 #include <stdlib.h>
 
-unsigned long int getRandomNumber(int n)
+unsigned long int getRandomNumber(unsigned long int n)
 {
     unsigned long int random_value =
         ((unsigned long int)rand() << 24) |
