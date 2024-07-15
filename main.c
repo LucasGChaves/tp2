@@ -3,6 +3,8 @@
 #include <string.h>
 #include <limits.h>
 #include <time.h>
+#include "page_table_entry.h"
+#include "lru.h"
 
 unsigned long int frameSize = 0;
 unsigned long int memorySize = 0;
@@ -14,12 +16,6 @@ unsigned int readCount = 0;
 unsigned int writeCount = 0;
 unsigned int pageFaultsCount = 0;
 unsigned int replacetamentsCount = 0;
-
-typedef struct {
-    unsigned long int frameNumber;
-    int valid;
-    unsigned long int lastAccess;
-} PageTableEntry;
 
 char *concat(const char *s1, const char *s2)
 {
@@ -52,22 +48,9 @@ void initializePageTable(PageTableEntry* pageTable, unsigned long int* freeFrame
     }
 }
 
-unsigned long int findPageWithLru(PageTableEntry* pageTable) {
-    unsigned long int lruPage = -1;
-    unsigned long int minTimestamp = LONG_MAX;
-
-    for (unsigned long int i = 0; i < pageTableSize; i++) {
-        if (pageTable[i].valid && pageTable[i].lastAccess < minTimestamp) {
-            minTimestamp = pageTable[i].lastAccess;
-            lruPage = i;
-        }
-    }
-    return lruPage;
-}
-
 unsigned long int processReplacement(PageTableEntry* pageTable, char* algorithm) {
     if(strcmp(algorithm, "lru") == 0) {
-        return findPageWithLru(pageTable);
+        return findPageWithLru(pageTable, pageTableSize);
     }
 }
 
@@ -114,12 +97,12 @@ unsigned char readMemory(PageTableEntry* pageTable, long int offset, unsigned lo
 void writeMemory(PageTableEntry* pageTable, long int offset,  unsigned long int virtualAddress, unsigned long int* freeFrames, unsigned char* memory, char* algorithm) {
     writeCount++;
     unsigned long int physicalAddress = translateAddress(pageTable, offset, virtualAddress, freeFrames, algorithm);
-    memory[physicalAddress] = 0xAB;
+    memory[physicalAddress] = 'b';
 }
 
 void initializeMemory(unsigned char* memory) {
     for(unsigned long int i=0; i<memorySize; i++) {
-        memory[i] = 0xAC;
+        memory[i] = 'a';
     }
 }
 
@@ -142,26 +125,25 @@ void processLog(PageTableEntry* pageTable, unsigned long int offset, unsigned lo
             fprintf(stderr, "Invalid line format: %s", line);
             exit(1);
         }
-        //printf("virtualAddress: %lu\n", virtualAddress);
+        
         if (operation == 'R') {
             unsigned char value = readMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm);
         } else {
             writeMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm);
         }
     }
-    printf("test\n");
     fclose(file);
 }
 
 void printRelatory(char* algorithm, char* fileName) {
-    printf("Executando o arquivo %s...\n", fileName);
-    printf("Tamanho da memoria: %ld\n", memorySize);
-    printf("Tamanho dos frames: %ld\n", frameSize);
-    printf("Tecnica de reposicao: %s\n", algorithm);
-    printf("Paginas lidas: %ld\n", readCount);
-    printf("Pagnas escritas: %ld\n", writeCount);
+    printf("Executing file %s...\n", fileName);
+    printf("Memory size (in bytes): %ld\n", memorySize);
+    printf("Frame size (in bytes): %ld\n", frameSize);
+    printf("Replacement algorithm: %s\n", algorithm);
+    printf("Pages read: %ld\n", readCount);
+    printf("Pages written: %ld\n", writeCount);
     printf("Page faults: %ld\n", pageFaultsCount);
-    printf("Substituicoes de pagina: %ld\n", replacetamentsCount);
+    printf("Page replacements: %ld\n", replacetamentsCount);
 }
 
 int main(int argc, char *argv[])
@@ -185,30 +167,28 @@ int main(int argc, char *argv[])
     unsigned int memorySizeInKB = atoi(argv[4]);
     unsigned int memorySizeInByte = memorySizeInKB * 1024;
     memorySize = memorySizeInByte;
-    
+    printf("argv[1]: %s / argv[2]: %s / argv[3]: %u / argv[4]: %u\n", algorithm, filename, frameSizeInKB, memorySizeInKB);
     int offsetInBits = getAddrOffset(frameSizeInByte);
     int bitsReservedToPages = addressSizeInBits - offsetInBits;
     pageTableSize = (1 << bitsReservedToPages); // 2^20
 
-    //printf("%ld", memorySize);
     unsigned char* memory = (unsigned char*) malloc(memorySize * sizeof(unsigned char));
-    //printf("\n0\n");
+
     numFrames = memorySize/frameSize;
 
     unsigned long int* freeFrames = (unsigned long int*) malloc(numFrames * sizeof(unsigned long int));
     numFreeFrames = numFrames;
-    //printf("\n1\n");
+
     initializeMemory(memory);
-    //printf("\n2\n");
-    //printf("%d\n", pageTableSize);
+
     PageTableEntry* pageTable = (PageTableEntry*) malloc(pageTableSize * sizeof(PageTableEntry));
-    //printf("\n3\n");
+
     initializePageTable(pageTable, freeFrames);
-    //printf("\n4 - %s\n", filename);
+
     processLog(pageTable, offsetInBits, freeFrames, memory, algorithm, filename);
-    //printf("\n5\n");
+
     printRelatory(algorithm, filename);
-    //printf("\n6\n");
+
     free(pageTable);
     free(memory);
     free(freeFrames);
