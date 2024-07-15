@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "page_table_entry.h": "c",
+        "second_chance.h": "c"
+    }
+}
