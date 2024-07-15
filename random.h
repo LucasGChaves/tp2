@@ -1,6 +1,6 @@
 #ifndef RANDOM
 #define RANDOM
 
-int getRandomNumber(int n);
+unsigned long int getRandomNumber(int n);
 
 #endif
