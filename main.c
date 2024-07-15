@@ -89,7 +89,7 @@ unsigned long int translateAddress(PageTableEntry *pageTable, long int offset, u
 
     if (pageTable[pageNumber].valid)
     {
-        //Hit
+        // Hit
         pageTable[pageNumber].lastAccess = globalTimestamp;
         updateReferenceBit(secondChanceQueue, pageTable[pageNumber]);
         return pageTable[pageNumber].frameNumber * frameSize + offset;
@@ -190,6 +190,7 @@ void processLog(PageTableEntry *pageTable, unsigned long int offset, unsigned lo
 
 int main(int argc, char *argv[])
 {
+    srand(749);
     clock_t begin = clock();
     if (argc != 5)
     {
@@ -214,16 +215,16 @@ int main(int argc, char *argv[])
     int bitsReservedToPages = addressSizeInBits - offsetInBits;
     pageTableSize = (1 << bitsReservedToPages); // 2^20
 
-    unsigned char* memory = (unsigned char*) malloc(memorySize * sizeof(unsigned char));
+    unsigned char *memory = (unsigned char *)malloc(memorySize * sizeof(unsigned char));
 
-    numFrames = memorySize/frameSize;
+    numFrames = memorySize / frameSize;
 
     unsigned long int *freeFrames = (unsigned long int *)malloc(numFrames * sizeof(unsigned long int));
     numFreeFrames = numFrames;
 
     initializeMemory(memory);
 
-    PageTableEntry* pageTable = (PageTableEntry*) malloc(pageTableSize * sizeof(PageTableEntry));
+    PageTableEntry *pageTable = (PageTableEntry *)malloc(pageTableSize * sizeof(PageTableEntry));
 
     initializePageTable(pageTable, freeFrames);
 
