@@ -86,9 +86,10 @@ unsigned long int translateAddress(PageTableEntry *pageTable, long int offset, u
 {
     unsigned long int pageNumber = virtualAddress >> offset;
     globalTimestamp++;
-    // printf("CALLING translateAddress -> address: %x(%ld) / pageNumber: %ld / valid: %d / lastAccess: %d / frameNumber: %d\n", virtualAddress, virtualAddress, pageNumber, pageTable[pageNumber].valid, pageTable[pageNumber].lastAccess, pageTable[pageNumber].frameNumber);
+
     if (pageTable[pageNumber].valid)
     {
+        //Hit
         pageTable[pageNumber].lastAccess = globalTimestamp;
         updateReferenceBit(secondChanceQueue, pageTable[pageNumber]);
         return pageTable[pageNumber].frameNumber * frameSize + offset;
@@ -160,7 +161,6 @@ void processLog(PageTableEntry *pageTable, unsigned long int offset, unsigned lo
         perror("Error opening file");
         exit(1);
     }
-    unsigned long int count = 0;
     char line[256];
 
     Queue *fifoQueue = createQueue();
@@ -168,7 +168,6 @@ void processLog(PageTableEntry *pageTable, unsigned long int offset, unsigned lo
 
     while (fgets(line, sizeof(line), file))
     {
-        // printf("%ld\n", count++);
         unsigned long int virtualAddress;
         char operation;
 
@@ -177,10 +176,9 @@ void processLog(PageTableEntry *pageTable, unsigned long int offset, unsigned lo
             fprintf(stderr, "Invalid line format: %s", line);
             exit(1);
         }
-        // printf("virtualAddress: %lu\n", virtualAddress);
         if (operation == 'R')
         {
-            unsigned char value = readMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm, secondChanceQueue, fifoQueue, pageTableSize);
+            readMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm, secondChanceQueue, fifoQueue, pageTableSize);
         }
         else
         {
@@ -211,6 +209,7 @@ int main(int argc, char *argv[])
     unsigned int memorySizeInKB = atoi(argv[4]);
     unsigned int memorySizeInByte = memorySizeInKB * 1024;
     memorySize = memorySizeInByte;
+
     int offsetInBits = getAddrOffset(frameSizeInByte);
     int bitsReservedToPages = addressSizeInBits - offsetInBits;
     pageTableSize = (1 << bitsReservedToPages); // 2^20

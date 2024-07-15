@@ -22,13 +22,12 @@ unsigned int writeCount = 0;
 unsigned int pageFaultsCount = 0;
 unsigned int replacetamentsCount = 0;
 
-// Função de hash para gerar o índice na tabela invertida
+//Hash to generate index in page table
 int hashFunction(InvertedPageTable *table, int processId, unsigned long int pageNumber)
 {
     return (processId * pageNumber) % pageTableSize;
 }
 
-// Função para criar uma nova tabela de páginas invertida
 InvertedPageTable *createInvertedPageTable(unsigned long int *freeFrames)
 {
     InvertedPageTable *table = (InvertedPageTable *)malloc(sizeof(InvertedPageTable));
@@ -54,7 +53,6 @@ InvertedPageTable *createInvertedPageTable(unsigned long int *freeFrames)
     return table;
 }
 
-// Função para inserir uma nova entrada na tabela invertida
 int insertInvertedPageTableEntry(InvertedPageTable *table, int processId, unsigned long int pageNumber, int frameNumber)
 {
     int index = hashFunction(table, processId, pageNumber);
@@ -68,13 +66,12 @@ int insertInvertedPageTableEntry(InvertedPageTable *table, int processId, unsign
     newEntry->pageNumber = pageNumber;
     newEntry->frameNumber = frameNumber;
     newEntry->valid = 1;
-    newEntry->next = table->entries[index]; // Insere no início da lista encadeada
+    newEntry->next = table->entries[index]; // Insert at beginning of linked list
     newEntry->lastAccess = globalTimestamp;
     table->entries[index] = newEntry;
     return 1;
 }
 
-// Função para buscar uma entrada na tabela invertida
 InvertedPageTableEntry *findInvertedPageTableEntry(InvertedPageTable *table, int processId, unsigned long int pageNumber)
 {
     int index = hashFunction(table, processId, pageNumber);
@@ -87,7 +84,7 @@ InvertedPageTableEntry *findInvertedPageTableEntry(InvertedPageTable *table, int
         }
         entry = entry->next;
     }
-    return NULL; // Entrada não encontrada
+    return NULL; // Entry not found
 }
 
 unsigned long int processReplacement(InvertedPageTable *pageTable, char *algorithm, SecondChanceQueue *secondChanceQueue, Queue *fifoQueue)
@@ -113,7 +110,6 @@ unsigned long int processReplacement(InvertedPageTable *pageTable, char *algorit
     return -1;
 }
 
-// Função para traduzir um endereço virtual para um endereço físico
 long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtualAddress, long int offset,
                           unsigned long int *freeFrames, char *algorithm,
                           SecondChanceQueue *secondChanceQueue, Queue *fifoQueue)
@@ -124,26 +120,24 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
 
     if (entry != NULL && entry->valid)
     {
-        // Página encontrada na memória (Page Hit)
+        //Hit
         entry->lastAccess = globalTimestamp;
         return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
     }
     else
     {
         
-        // Página não encontrada na memória (Page Fault)
+        //Page fault
         pageFaultsCount++;
 
         unsigned long int frameNumber;
         if (numFreeFrames > 0)
         {
-            // Há quadros livres disponíveis
             frameNumber = freeFrames[--numFreeFrames];
-            //printf("frameNumber: %lu\n", frameNumber);
         }
         else
         {
-            // Todos os quadros estão ocupados, precisa substituir uma página
+            //Replacement
             replacetamentsCount++;
             frameNumber = processReplacement(pageTable, algorithm, secondChanceQueue, fifoQueue);
 
@@ -153,7 +147,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
                 exit(1);
             }
 
-            // Invalida a entrada antiga na tabela de páginas invertida
+            //Invalidate old entry on inverted table page
             InvertedPageTableEntry *oldEntry = NULL;
             for (int i = 0; i < pageTableSize; i++)
             {
@@ -170,14 +164,13 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
             }
         }
 
-        // Insere a nova entrada na tabela de páginas invertida
         if (!insertInvertedPageTableEntry(pageTable, PROCESS_ID, pageNumber, frameNumber))
         {
             perror("Erro ao inserir entrada na tabela de páginas invertida");
             exit(1);
         }
         
-        // Atualiza FIFO e Second Chance
+        // Update FIFO and Second Chance
         PageTableEntry newPage;
 
         newPage.frameNumber = frameNumber;
@@ -185,8 +178,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
         //enqueue(fifoQueue, newPage);
         //enqueueSecondChanceQueue(secondChanceQueue, newPage);
 
-        //printf("frameNumber: %lu / frameSize: %lu / virtualAddress: %lu / offset: %lu\n", frameNumber, frameSize, virtualAddress, offset);
-        return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
+        return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calculate physical address
     }
 }
 
@@ -194,7 +186,6 @@ unsigned char readMemory(InvertedPageTable *pageTable, long int offset, unsigned
 {
     readCount++;
     unsigned long int physicalAddress = translateAddress(pageTable, virtualAddress, offset, freeFrames, algorithm, secondChanceQueue, fifoQueue);
-    //"physical address: %lu\n", physicalAddress);
     return memory[physicalAddress];
 }
 
@@ -223,7 +214,6 @@ void processLog(InvertedPageTable *pageTable, unsigned long int offset, unsigned
         perror("Error opening file");
         exit(1);
     }
-    unsigned long int count = 0;
     char line[256];
 
     Queue *fifoQueue = NULL;/*createQueue();*/
@@ -243,15 +233,13 @@ void processLog(InvertedPageTable *pageTable, unsigned long int offset, unsigned
         
         if (operation == 'R')
         {
-            unsigned char value = readMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm, secondChanceQueue, fifoQueue);
+            readMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm, secondChanceQueue, fifoQueue);
         }
         else
         {
             writeMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm, secondChanceQueue, fifoQueue);
         }
-        //printf("%ld\n", count++);
     }
-    //printf("test\n");
     fclose(file);
 }
 
@@ -269,8 +257,6 @@ int main(int argc, char *argv[])
     char *algorithm = argv[1];
     char *filename = argv[2];
 
-    int addressSizeInBits = 32;
-
     unsigned int frameSizeInKB = atoi(argv[3]);
     unsigned int frameSizeInByte = frameSizeInKB * 1024;
     frameSize = frameSizeInByte;
@@ -280,7 +266,6 @@ int main(int argc, char *argv[])
     memorySize = memorySizeInByte;
 
     int offsetInBits = getAddrOffset(frameSizeInByte);
-    int bitsReservedToPages = addressSizeInBits - offsetInBits;
 
     unsigned char *memory = (unsigned char *)malloc(memorySize * sizeof(unsigned char));
 
@@ -298,12 +283,14 @@ int main(int argc, char *argv[])
     processLog(pageTable, offsetInBits, freeFrames, memory, algorithm, filename);
     printRelatory(algorithm, filename, memorySize, frameSize, readCount, writeCount, pageFaultsCount, replacetamentsCount);
 
+    //freeing memory
     for (unsigned long int i = 0; i < pageTableSize; i++) {
         free(pageTable->entries[i]);
     }
     free(pageTable);
     free(memory);
     free(freeFrames);
+
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("Execution time in seconds: %f\n", time_spent);

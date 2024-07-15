@@ -14,9 +14,7 @@ unsigned long int findPageWithLru(InvertedPageTable *table, unsigned long int pa
             if (entry->valid && entry->lastAccess < minTimestamp) {
                 minTimestamp = entry->lastAccess;
                 lruFrame = entry->frameNumber;
-                //printf("entered --- ");
             }
-            //printf("pageNumber: %lu\n", entry->frameNumber);
             entry = entry->next;
         }
 

@@ -48,7 +48,7 @@ PageTableEntry dequeue(Queue *q)
     if (isEmpty(q))
     {
         printf("Error: Queue is empty!\n");
-        return emptyPageTableEntry; // Sentinel value to indicate error
+        return emptyPageTableEntry; //Error
     }
     Node *temp = q->front;
     PageTableEntry page = temp->page;
@@ -56,7 +56,7 @@ PageTableEntry dequeue(Queue *q)
 
     if (q->front == NULL)
     {
-        q->rear = NULL; // Queue is now empty
+        q->rear = NULL; //Queue is empty
     }
 
     free(temp);

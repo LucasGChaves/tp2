@@ -64,16 +64,20 @@ unsigned long int translateAddress(FirstLevelPageTable* firstLevelPageTable, uns
     globalTimestamp++;
 
     if (firstLevelPageTable->entries[firstLevelIndex]->entries[secondLevelIndex].valid) {
+        //Hit
+
         firstLevelPageTable->entries[firstLevelIndex]->entries[secondLevelIndex].lastAccess = globalTimestamp;
         return firstLevelPageTable->entries[firstLevelIndex]->entries[secondLevelIndex].frameNumber * frameSize + pageOffset;
     } else {
         // Page fault
+
         pageFaultsCount++;
         unsigned long int frameNumber;
         if (numFreeFrames > 0) {
             frameNumber = freeFrames[--numFreeFrames];
         } else {
-            //replacement
+            //Replacement
+
             replacetamentsCount++;
             long int *result = (long int*) malloc(sizeof(long int) * 2); 
             result[0] = -1;
@@ -126,10 +130,9 @@ void processLog(FirstLevelPageTable* firstLevelPageTable, unsigned long int leve
         perror("Error opening file");
         exit(1);
     }
-    unsigned long int count = 0;
+
     char line[256];
     while (fgets(line, sizeof(line), file)) {
-       //printf("%d\n", count++);
         unsigned long int virtualAddress;
         char operation;
 
@@ -139,7 +142,7 @@ void processLog(FirstLevelPageTable* firstLevelPageTable, unsigned long int leve
         }
 
         if (operation == 'R') {
-            unsigned char value = readMemory(firstLevelPageTable, levelOffset, offset, virtualAddress, freeFrames, memory, algorithm);
+            readMemory(firstLevelPageTable, levelOffset, offset, virtualAddress, freeFrames, memory, algorithm);
         } else {
             writeMemory(firstLevelPageTable, levelOffset, offset, virtualAddress, freeFrames, memory, algorithm);
         }
@@ -171,8 +174,11 @@ int main(int argc, char *argv[])
 
     unsigned long int offset = getAddrOffset(frameSizeInByte);
     int bitsReservedToPages = addressSizeInBits - offset;
+
     pageTableSize = (1 << bitsReservedToPages); // 2^20
-    unsigned long int levelOffset = bitsReservedToPages / 2;
+
+    unsigned long int levelOffset = bitsReservedToPages / 2; //10 bits for each level
+
     firstLevelTableSize = 1 << levelOffset;
     secondLevelTableSize = 1 << levelOffset;
 
@@ -192,6 +198,7 @@ int main(int argc, char *argv[])
 
     printRelatory(algorithm, filename, memorySize, frameSize, readCount, writeCount, pageFaultsCount, replacetamentsCount);
 
+    //freeing memory
     for (unsigned long int i = 0; i < firstLevelTableSize; i++) {
         free(firstLevelPageTable->entries[i]->entries);
         free(firstLevelPageTable->entries[i]);
@@ -199,6 +206,7 @@ int main(int argc, char *argv[])
     free(firstLevelPageTable);
     free(memory);
     free(freeFrames);
+
     clock_t end = clock();
     double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
     printf("Execution time in seconds: %f\n", time_spent);

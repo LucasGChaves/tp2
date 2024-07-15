@@ -19,7 +19,7 @@ int isSecondChanceQueueEmpty(SecondChanceQueue *q)
     return q->front == NULL;
 }
 
-// Enfileira uma nova página na fila
+//Enqueue page
 void enqueueSecondChanceQueue(SecondChanceQueue *q, PageTableEntry page)
 {
     SecondChanceQueueNode *newNode = (SecondChanceQueueNode *)malloc(sizeof(SecondChanceQueueNode));
@@ -29,7 +29,7 @@ void enqueueSecondChanceQueue(SecondChanceQueue *q, PageTableEntry page)
         exit(1);
     }
     newNode->page = page;
-    newNode->referenceBit = 1; // Define o bit de referência como 1 ao enfileirar
+    newNode->referenceBit = 1; //Defines reference bit to 1
     newNode->next = NULL;
 
     if (isSecondChanceQueueEmpty(q))
@@ -41,10 +41,10 @@ void enqueueSecondChanceQueue(SecondChanceQueue *q, PageTableEntry page)
         q->rear->next = newNode;
         q->rear = newNode;
     }
-    q->rear->next = q->front; // Mantém a circularidade
+    q->rear->next = q->front; // Keep circularity
 }
 
-// Desinfileira uma página da fila, aplicando a lógica de segunda chance
+//Dequeue page
 PageTableEntry dequeueSecondChanceQueue(SecondChanceQueue *q)
 {
     PageTableEntry emptyPage;
@@ -52,20 +52,20 @@ PageTableEntry dequeueSecondChanceQueue(SecondChanceQueue *q)
     if (isSecondChanceQueueEmpty(q))
     {
         printf("Erro: Fila vazia!\n");
-        return emptyPage; // Valor sentinela para indicar erro
+        return emptyPage; //Error
     }
 
     SecondChanceQueueNode *current = q->front;
 
-    // Procura pela próxima página a ser substituída (bit de referência = 0)
+    //Search for next page to be replaced with reference bit = 0
     while (current->referenceBit == 1)
     {
-        current->referenceBit = 0; // Dá uma segunda chance
+        current->referenceBit = 0; //Second chance
         current = current->next;
-        q->front = current; // Move o ponteiro 'front' para o próximo nó
+        q->front = current;
     }
 
-    // Remove o nó encontrado (bit de referência = 0)
+    //Removes node found with reference bit = 0
     PageTableEntry page = current->page;
     if (q->front == q->rear)
     { // Único nó na fila
@@ -74,7 +74,7 @@ PageTableEntry dequeueSecondChanceQueue(SecondChanceQueue *q)
     else
     {
         q->front = current->next;
-        q->rear->next = q->front; // Mantém a circularidade
+        q->rear->next = q->front; //Keep circularity again
     }
     free(current);
 
@@ -90,7 +90,8 @@ void freeSecondChanceQueue(SecondChanceQueue *q)
         q->front = q->front->next;
         free(temp);
         if (q->front == q->rear->next)
-        { // Last SecondChanceQueuenode
+        { 
+            //Last node
             free(q->front);
             break;
         }
