@@ -4,6 +4,8 @@
         "stdlib.h": "c",
         "stdio.h": "c",
         "two_levels_structs.h": "c",
-        "limits.h": "c"
+        "limits.h": "c",
+        "page_table_entry.h": "c",
+        "second_chance.h": "c"
     }
 }
