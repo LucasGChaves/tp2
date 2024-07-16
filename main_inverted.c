@@ -121,7 +121,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
     {
         // Hit
         entry->lastAccess = globalTimestamp;
-        return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
+        return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1));
     }
     else
     {

@@ -123,7 +123,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
     if (entry != NULL && entry->valid)
     {
         // Page Hit
-        return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
+        return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1));
     }
     else
     {
@@ -133,7 +133,6 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
         int frameNumber;
         if (*numFreeFrames > 0)
         {
-            // Há quadros livres disponíveis
             frameNumber = freeFrames[--(*numFreeFrames)];
         }
         else
@@ -174,7 +173,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
         enqueue(fifoQueue, newPage);
         enqueueSecondChanceQueue(secondChanceQueue, newPage);
 
-        return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
+        return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1));
     }
 }
 
@@ -278,7 +277,7 @@ int main(int argc, char *argv[])
 
     int offsetInBits = getAddrOffset(frameSizeInByte);
     int bitsReservedToPages = addressSizeInBits - offsetInBits;
-    pageTableSize = (1 << bitsReservedToPages); // 2^20
+    pageTableSize = (1 << bitsReservedToPages);
 
     unsigned char *memory = (unsigned char *)malloc(memorySize * sizeof(unsigned char));
 

@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
 
     int offsetInBits = getAddrOffset(frameSizeInByte);
     int bitsReservedToPages = addressSizeInBits - offsetInBits;
-    pageTableSize = (1 << bitsReservedToPages); // 2^20
+    pageTableSize = (1 << bitsReservedToPages);
 
     unsigned char *memory = (unsigned char *)malloc(memorySize * sizeof(unsigned char));
 
