@@ -19,7 +19,6 @@ int isSecondChanceQueueEmpty(SecondChanceQueue *q)
     return q->front == NULL;
 }
 
-//Enqueue page
 void enqueueSecondChanceQueue(SecondChanceQueue *q, PageTableEntry page)
 {
     SecondChanceQueueNode *newNode = (SecondChanceQueueNode *)malloc(sizeof(SecondChanceQueueNode));
@@ -29,7 +28,7 @@ void enqueueSecondChanceQueue(SecondChanceQueue *q, PageTableEntry page)
         exit(1);
     }
     newNode->page = page;
-    newNode->referenceBit = 1; //Defines reference bit to 1
+    newNode->referenceBit = 1;
     newNode->next = NULL;
 
     if (isSecondChanceQueueEmpty(q))
@@ -41,10 +40,9 @@ void enqueueSecondChanceQueue(SecondChanceQueue *q, PageTableEntry page)
         q->rear->next = newNode;
         q->rear = newNode;
     }
-    q->rear->next = q->front; // Keep circularity
+    q->rear->next = q->front;
 }
 
-//Dequeue page
 PageTableEntry dequeueSecondChanceQueue(SecondChanceQueue *q)
 {
     PageTableEntry emptyPage;
@@ -52,29 +50,27 @@ PageTableEntry dequeueSecondChanceQueue(SecondChanceQueue *q)
     if (isSecondChanceQueueEmpty(q))
     {
         printf("Erro: Fila vazia!\n");
-        return emptyPage; //Error
+        return emptyPage;
     }
 
     SecondChanceQueueNode *current = q->front;
 
-    //Search for next page to be replaced with reference bit = 0
     while (current->referenceBit == 1)
     {
-        current->referenceBit = 0; //Second chance
+        current->referenceBit = 0;
         current = current->next;
         q->front = current;
     }
 
-    //Removes node found with reference bit = 0
     PageTableEntry page = current->page;
     if (q->front == q->rear)
-    { // Único nó na fila
+    {
         q->front = q->rear = NULL;
     }
     else
     {
         q->front = current->next;
-        q->rear->next = q->front; //Keep circularity again
+        q->rear->next = q->front;
     }
     free(current);
 
@@ -90,8 +86,7 @@ void freeSecondChanceQueue(SecondChanceQueue *q)
         q->front = q->front->next;
         free(temp);
         if (q->front == q->rear->next)
-        { 
-            //Last node
+        {
             free(q->front);
             break;
         }

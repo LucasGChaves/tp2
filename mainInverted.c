@@ -17,30 +17,26 @@ unsigned int writeCount = 0;
 unsigned int pageFaultsCount = 0;
 unsigned int replacetamentsCount = 0;
 
-// Estrutura da entrada da tabela de páginas invertida
 typedef struct InvertedPageTableEntry
 {
-    int processId;                       // ID do processo
-    unsigned long int pageNumber;        // Número da página virtual
-    int frameNumber;                     // Número do quadro físico (índice na tabela)
-    int valid;                           // Bit de validade
-    struct InvertedPageTableEntry *next; // Ponteiro para a próxima entrada na lista encadeada (para tratar colisões)
+    int processId;
+    unsigned long int pageNumber;
+    int frameNumber;
+    int valid;
+    struct InvertedPageTableEntry *next;
 } InvertedPageTableEntry;
 
-// Estrutura da tabela de páginas invertida
 typedef struct InvertedPageTable
 {
-    int tableSize;                    // Tamanho da tabela (número de quadros físicos)
-    InvertedPageTableEntry **entries; // Array de ponteiros para as entradas da tabela (para usar listas encadeadas)
+    int tableSize;
+    InvertedPageTableEntry **entries;
 } InvertedPageTable;
 
-// Função de hash para gerar o índice na tabela invertida
 int hashFunction(InvertedPageTable *table, int processId, unsigned long int pageNumber)
 {
     return (processId * pageNumber) % table->tableSize;
 }
 
-// Função para criar uma nova tabela de páginas invertida
 InvertedPageTable *createInvertedPageTable(int numFrames)
 {
     InvertedPageTable *table = (InvertedPageTable *)malloc(sizeof(InvertedPageTable));
@@ -60,7 +56,6 @@ InvertedPageTable *createInvertedPageTable(int numFrames)
     return table;
 }
 
-// Função para inserir uma nova entrada na tabela invertida
 int insertInvertedPageTableEntry(InvertedPageTable *table, int processId, unsigned long int pageNumber, int frameNumber)
 {
     int index = hashFunction(table, processId, pageNumber);
@@ -74,12 +69,11 @@ int insertInvertedPageTableEntry(InvertedPageTable *table, int processId, unsign
     newEntry->pageNumber = pageNumber;
     newEntry->frameNumber = frameNumber;
     newEntry->valid = 1;
-    newEntry->next = table->entries[index]; // Insere no início da lista encadeada
+    newEntry->next = table->entries[index];
     table->entries[index] = newEntry;
     return 1;
 }
 
-// Função para buscar uma entrada na tabela invertida
 InvertedPageTableEntry *findInvertedPageTableEntry(InvertedPageTable *table, int processId, unsigned long int pageNumber)
 {
     int index = hashFunction(table, processId, pageNumber);
@@ -92,7 +86,7 @@ InvertedPageTableEntry *findInvertedPageTableEntry(InvertedPageTable *table, int
         }
         entry = entry->next;
     }
-    return NULL; // Entrada não encontrada
+    return NULL;
 }
 
 int processReplacement(InvertedPageTable *pageTable, char *algorithm, SecondChanceQueue *secondChanceQueue, Queue *fifoQueue, unsigned long int pageTableSize)
@@ -118,7 +112,6 @@ int processReplacement(InvertedPageTable *pageTable, char *algorithm, SecondChan
     return -1;
 }
 
-// Função para traduzir um endereço virtual para um endereço físico
 long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtualAddress, long int offset,
                           unsigned long int *freeFrames, int *numFreeFrames, char *algorithm,
                           SecondChanceQueue *secondChanceQueue, Queue *fifoQueue)
@@ -129,12 +122,12 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
 
     if (entry != NULL && entry->valid)
     {
-        // Página encontrada na memória (Page Hit)
+        // Page Hit
         return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
     }
     else
     {
-        // Página não encontrada na memória (Page Fault)
+        // Page Fault
         pageFaultsCount++;
 
         int frameNumber;
@@ -145,7 +138,6 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
         }
         else
         {
-            // Todos os quadros estão ocupados, precisa substituir uma página
             replacetamentsCount++;
             frameNumber = processReplacement(pageTable, algorithm, secondChanceQueue, fifoQueue, pageTable->tableSize);
             if (frameNumber == -1)
@@ -154,7 +146,6 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
                 exit(1);
             }
 
-            // Invalida a entrada antiga na tabela de páginas invertida
             InvertedPageTableEntry *oldEntry = NULL;
             for (int i = 0; i < pageTable->tableSize; i++)
             {
@@ -171,21 +162,19 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
             }
         }
 
-        // Insere a nova entrada na tabela de páginas invertida
         if (!insertInvertedPageTableEntry(pageTable, PROCESS_ID, pageNumber, frameNumber))
         {
             perror("Erro ao inserir entrada na tabela de páginas invertida");
             exit(1);
         }
 
-        // Atualiza FIFO e Second Chance
         PageTableEntry newPage;
         newPage.frameNumber = frameNumber;
         newPage.valid = 1;
         enqueue(fifoQueue, newPage);
         enqueueSecondChanceQueue(secondChanceQueue, newPage);
 
-              return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
+        return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
     }
 }
 
