@@ -22,7 +22,6 @@ unsigned int writeCount = 0;
 unsigned int pageFaultsCount = 0;
 unsigned int replacetamentsCount = 0;
 
-//Hash to generate index in page table
 int hashFunction(InvertedPageTable *table, int processId, unsigned long int pageNumber)
 {
     return (processId * pageNumber) % pageTableSize;
@@ -66,7 +65,7 @@ int insertInvertedPageTableEntry(InvertedPageTable *table, int processId, unsign
     newEntry->pageNumber = pageNumber;
     newEntry->frameNumber = frameNumber;
     newEntry->valid = 1;
-    newEntry->next = table->entries[index]; // Insert at beginning of linked list
+    newEntry->next = table->entries[index];
     newEntry->lastAccess = globalTimestamp;
     table->entries[index] = newEntry;
     return 1;
@@ -84,7 +83,7 @@ InvertedPageTableEntry *findInvertedPageTableEntry(InvertedPageTable *table, int
         }
         entry = entry->next;
     }
-    return NULL; // Entry not found
+    return NULL;
 }
 
 unsigned long int processReplacement(InvertedPageTable *pageTable, char *algorithm, SecondChanceQueue *secondChanceQueue, Queue *fifoQueue)
@@ -120,14 +119,14 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
 
     if (entry != NULL && entry->valid)
     {
-        //Hit
+        // Hit
         entry->lastAccess = globalTimestamp;
         return entry->frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calcula o endereço físico
     }
     else
     {
-        
-        //Page fault
+
+        // Page fault
         pageFaultsCount++;
 
         unsigned long int frameNumber;
@@ -137,7 +136,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
         }
         else
         {
-            //Replacement
+            // Replacement
             replacetamentsCount++;
             frameNumber = processReplacement(pageTable, algorithm, secondChanceQueue, fifoQueue);
 
@@ -147,7 +146,7 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
                 exit(1);
             }
 
-            //Invalidate old entry on inverted table page
+            // Invalidate old entry on inverted table page
             InvertedPageTableEntry *oldEntry = NULL;
             for (int i = 0; i < pageTableSize; i++)
             {
@@ -169,14 +168,14 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
             perror("Erro ao inserir entrada na tabela de páginas invertida");
             exit(1);
         }
-        
+
         // Update FIFO and Second Chance
         PageTableEntry newPage;
 
         newPage.frameNumber = frameNumber;
         newPage.valid = 1;
-        //enqueue(fifoQueue, newPage);
-        //enqueueSecondChanceQueue(secondChanceQueue, newPage);
+        // enqueue(fifoQueue, newPage);
+        // enqueueSecondChanceQueue(secondChanceQueue, newPage);
 
         return frameNumber * frameSize + (virtualAddress & ((1 << offset) - 1)); // Calculate physical address
     }
@@ -216,12 +215,12 @@ void processLog(InvertedPageTable *pageTable, unsigned long int offset, unsigned
     }
     char line[256];
 
-    Queue *fifoQueue = NULL;/*createQueue();*/
-    SecondChanceQueue *secondChanceQueue = NULL;/*createSecondChanceQueue();*/
+    Queue *fifoQueue = NULL;                     /*createQueue();*/
+    SecondChanceQueue *secondChanceQueue = NULL; /*createSecondChanceQueue();*/
 
     while (fgets(line, sizeof(line), file))
     {
-        
+
         unsigned long int virtualAddress;
         char operation;
 
@@ -230,7 +229,7 @@ void processLog(InvertedPageTable *pageTable, unsigned long int offset, unsigned
             fprintf(stderr, "Invalid line format: %s", line);
             exit(1);
         }
-        
+
         if (operation == 'R')
         {
             readMemory(pageTable, offset, virtualAddress, freeFrames, memory, algorithm, secondChanceQueue, fifoQueue);
@@ -283,8 +282,8 @@ int main(int argc, char *argv[])
     processLog(pageTable, offsetInBits, freeFrames, memory, algorithm, filename);
     printRelatory(algorithm, filename, memorySize, frameSize, readCount, writeCount, pageFaultsCount, replacetamentsCount);
 
-    //freeing memory
-    for (unsigned long int i = 0; i < pageTableSize; i++) {
+    for (unsigned long int i = 0; i < pageTableSize; i++)
+    {
         free(pageTable->entries[i]);
     }
     free(pageTable);
