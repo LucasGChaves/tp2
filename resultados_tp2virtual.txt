@@ -1,0 +1,677 @@
+Página fixa em 4kb, tamanho da memória variando
+Página de 4kB, Memória 1024kb
+
+COMPILADOR-LRU 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 892816
+Pages written: 107184
+Page faults: 25308
+Page replacements: 25052
+Execution time in seconds: 53.637598
+
+COMPILADOR-FIFO 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 892816
+Pages written: 107184
+Page faults: 31698
+Page replacements: 31442
+Execution time in seconds: 66.891673
+
+COMPILADOR-2A 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 892816
+Pages written: 107184
+Page faults: 75494
+Page replacements: 75238
+Execution time in seconds: 159.098393
+
+COMPILADOR-RANDOM 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 892816
+Pages written: 107184
+Page faults: 31885
+Page replacements: 31629
+Execution time in seconds: 6.060404
+---------------------------------------
+COMPRESSOR-LRU 4/256
+Memory size (in bytes): 262144
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 877581
+Pages written: 122419
+Page faults: 1264
+Page replacements: 1200
+Execution time in seconds: 2.747959
+
+COMPRESSOR-FIFO 4/256
+Memory size (in bytes): 262144
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 877581
+Pages written: 122419
+Page faults: 1467
+Page replacements: 1403
+Execution time in seconds: 3.194152
+
+COMPRESSOR-2A 4/256
+Memory size (in bytes): 262144
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 877581
+Pages written: 122419
+Page faults: 129605
+Page replacements: 129541
+Execution time in seconds: 279.059380
+
+COMPRESSOR-RANDOM 4/256
+Memory size (in bytes): 262144
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 877581
+Pages written: 122419
+Page faults: 1600
+Page replacements: 1536
+Execution time in seconds: 1.330299
+---------------------------------------
+MATRIZ-LRU 4/1024
+Replacement algorithm: lru
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Pages read: 932830
+Pages written: 67170
+Page faults: 5673
+Page replacements: 5417
+Execution time in seconds: 11.770840
+
+MATRIZ-FIFO 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 932830
+Pages written: 67170
+Page faults: 8551
+Page replacements: 8295
+Execution time in seconds: 15.257121
+
+MATRIZ-2A 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 932830
+Pages written: 67170
+Page faults: 136318
+Page replacements: 136062
+Execution time in seconds: 293.216154
+
+MATRIZ-RANDOM 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 932830
+Pages written: 67170
+Page faults: 9359
+Page replacements: 9103
+Execution time in seconds: 1.960253
+---------------------------------------
+SIMULADOR-LRU 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 839017
+Pages written: 160983
+Page faults: 11240
+Page replacements: 10984
+Execution time in seconds: 20.733817
+
+SIMULADOR-FIFO 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 839017
+Pages written: 160983
+Page faults: 15440
+Page replacements: 15184
+Execution time in seconds: 32.841291
+
+SIMULADOR-2A 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 839017
+Pages written: 160983
+Page faults: 361791
+Page replacements: 361535
+Execution time in seconds: 776.720175
+
+SIMULADOR-RANDOM 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 839017
+Pages written: 160983
+Page faults: 15742
+Page replacements: 15486
+Execution time in seconds: 3.155890
+***************************************
+Página de 4kB, Memória 8192kb
+
+COMPILADOR-LRU 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 892816
+Pages written: 107184
+Page faults: 2904
+Page replacements: 856
+Execution time in seconds: 2.987147
+
+COMPILADOR-FIFO 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 892816
+Pages written: 107184
+Page faults: 3432
+Page replacements: 1384
+Execution time in seconds: 4.160515
+
+COMPILADOR-2A 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 892816
+Pages written: 107184
+Page faults: 2929
+Page replacements: 881
+Execution time in seconds: 3.379643
+
+COMPILADOR-RANDOM 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 892816
+Pages written: 107184
+Page faults: 3444
+Page replacements: 1396
+Execution time in seconds: 1.418524
+---------------------------------------
+COMPRESSOR-LRU 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 877581
+Pages written: 122419
+Page faults: 397
+Page replacements: 141
+Execution time in seconds: 0.576687
+
+COMPRESSOR-FIFO 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 877581
+Pages written: 122419
+Page faults: 511
+Page replacements: 255
+Execution time in seconds: 0.910472
+
+COMPRESSOR-2A 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 877581
+Pages written: 122419
+Page faults: 432
+Page replacements: 176
+Execution time in seconds: 0.631736
+
+COMPRESSOR-RANDOM 4/1024
+Memory size (in bytes): 1048576
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 877581
+Pages written: 122419
+Page faults: 420
+Page replacements: 164
+Execution time in seconds: 0.301648
+---------------------------------------
+MATRIZ-LRU 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 932830
+Pages written: 67170
+Page faults: 2576
+Page replacements: 528
+Execution time in seconds: 1.686409
+
+MATRIZ-FIFO 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 932830
+Pages written: 67170
+Page faults: 2798
+Page replacements: 750
+Execution time in seconds: 2.187253
+
+MATRIZ-2A 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 932830
+Pages written: 67170
+Page faults: 2642
+Page replacements: 594
+Execution time in seconds: 2.396831
+
+MATRIZ-RANDOM 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 932830
+Pages written: 67170
+Page faults: 2671
+Page replacements: 623
+Execution time in seconds: 0.673201
+---------------------------------------
+SIMULADOR-LRU 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: lru
+Pages read: 839017
+Pages written: 160983
+Page faults: 3951
+Page replacements: 1903
+Execution time in seconds: 5.275014
+
+SIMULADOR-FIFO 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: fifo
+Pages read: 839017
+Pages written: 160983
+Page faults: 4314
+Page replacements: 2266
+Execution time in seconds: 5.740049
+
+SIMULADOR-2A 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: 2a
+Pages read: 839017
+Pages written: 160983
+Page faults: 3980
+Page replacements: 1932
+Execution time in seconds: 5.740771
+
+SIMULADOR-RANDOM 4/8192
+Memory size (in bytes): 8388608
+Frame size (in bytes): 4096
+Replacement algorithm: random
+Pages read: 839017
+Pages written: 160983
+Page faults: 4530
+Page replacements: 2482
+Execution time in seconds: 1.940595
+***************************************
+***************************************
+Memória fixa em 4096kb, tamanho de página variando
+Página de 2kB, Memória 4096kB
+
+COMPILADOR-LRU 2/4096
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: lru
+Pages read: 892816
+Pages written: 107184
+Page faults: 3828
+Page replacements: 1780
+Execution time in seconds: 12.464000
+
+COMPILADOR-FIFO 2/4096
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: fifo
+Pages read: 892816
+Pages written: 107184
+Page faults: 4849
+Page replacements: 2801
+Execution time in seconds: 19.632000
+
+COMPILADOR-RANDOM 2/4096
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: random
+Pages read: 892816
+Pages written: 107184
+Page faults: 5224
+Page replacements: 3176
+Execution time in seconds: 4.870326
+
+COMPILADOR-2A 2/4096
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: 2a
+Pages read: 892816
+Pages written: 107184
+Page faults: 3907
+Page replacements: 1859
+Execution time in seconds: 14.788936
+---------------------------------------
+COMPRESSOR-LRU 2/4096
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: lru
+Pages read: 877581
+Pages written: 122419
+Page faults: 419
+Page replacements: 0
+Execution time in seconds: 1.737697
+
+COMPRESSOR-FIFO 2/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: fifo
+Pages read: 877581
+Pages written: 122419
+Page faults: 419
+Page replacements: 0
+Execution time in seconds: 1.788277
+
+COMPRESSOR-RANDOM 2/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: random
+Pages read: 877581
+Pages written: 122419
+Page faults: 419
+Page replacements: 0
+Execution time in seconds: 1.682482
+
+COMPRESSOR-2A 2/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: 2a
+Pages read: 877581
+Pages written: 122419
+Page faults: 419
+Page replacements: 0
+Execution time in seconds: 1.687262
+---------------------------------------
+MATRIZ-LRU 2/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: lru
+Pages read: 932830
+Pages written: 67170
+Page faults: 3061
+Page replacements: 1013
+Execution time in seconds: 7.444972
+
+MATRIZ-FIFO 2/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: fifo
+Pages read: 932830
+Pages written: 67170
+Page faults: 3367
+Page replacements: 1319
+Execution time in seconds: 8.564847
+
+MATRIZ-RANDOM 2/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: random
+Pages read: 932830
+Pages written: 67170
+Page faults: 3305
+Page replacements: 1257
+Execution time in seconds: 1.851625
+
+MATRIZ-2A 2/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: 2a
+Pages read: 932830
+Pages written: 67170
+Page faults: 3225
+Page replacements: 1177
+Execution time in seconds: 10.289159
+---------------------------------------
+SIIMULADOR-LRU 2/4096
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: lru
+Pages read: 839017
+Pages written: 160983
+Page faults: 5415
+Page replacements: 3367
+Execution time in seconds: 27.077688
+
+SIMULADOR-FIFO 2/4096
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: fifo
+Pages read: 839017
+Pages written: 160983
+Page faults: 6168
+Page replacements: 4120
+Execution time in seconds: 30.479781
+
+SIMULADOR-RANDOM
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: random
+Pages read: 839017
+Pages written: 160983
+Page faults: 6341
+Page replacements: 4293
+Execution time in seconds: 5.960668
+
+SIMULADOR-2A
+Memory size (in bytes): 4194304
+Frame size (in bytes): 2048
+Replacement algorithm: 2a
+Pages read: 839017
+Pages written: 160983
+Page faults: 5437
+Page replacements: 3389
+Execution time in seconds: 23.687254
+***************************************
+Página 64kB, Memória 4096kB
+
+COMPILADOR-LRU 64/4096
+Executing file compilador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: lru
+Pages read: 892816
+Pages written: 107184
+Page faults: 30416
+Page replacements: 30352
+Execution time in seconds: 4.574884
+
+COMPILADOR-FIFO 64/4096
+Executing file compilador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: fifo
+Pages read: 892816
+Pages written: 107184
+Page faults: 38496
+Page replacements: 38432
+Execution time in seconds: 5.973295
+
+COMPILADOR-RANDOM 64/4096
+Executing file compilador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: random
+Pages read: 892816
+Pages written: 107184
+Page faults: 41668
+Page replacements: 41604
+Execution time in seconds: 2.007831
+
+COMPILADOR-2A 64/4096
+Executing file compilador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: 2a
+Pages read: 892816
+Pages written: 107184
+Page faults: 145653
+Page replacements: 145589
+Execution time in seconds: 21.959814
+---------------------------------------
+COMPRESSOR-LRU 64/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: lru
+Pages read: 877581
+Pages written: 122419
+Page faults: 357
+Page replacements: 293
+Execution time in seconds: 0.346320
+
+COMPRESSOR-FIFO 64/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: fifo
+Pages read: 877581
+Pages written: 122419
+Page faults: 444
+Page replacements: 380
+Execution time in seconds: 0.346654
+
+COMPRESSOR-RANDOM 64/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: random
+Pages read: 877581
+Pages written: 122419
+Page faults: 487
+Page replacements: 423
+Execution time in seconds: 0.353515
+
+COMPRESSOR-2A 64/4096
+Executing file compressor.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: 2a
+Pages read: 877581
+Pages written: 122419
+Page faults: 387
+Page replacements: 323
+Execution time in seconds: 0.281205
+---------------------------------------
+MATRIZ-LRU 64/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: lru
+Pages read: 932830
+Pages written: 67170
+Page faults: 9963
+Page replacements: 9899
+Execution time in seconds: 1.665947
+
+MATRIZ-FIFO 64/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: fifo
+Pages read: 932830
+Pages written: 67170
+Page faults: 14861
+Page replacements: 14797
+Execution time in seconds: 2.602877
+
+MATRIZ-RANDOM 64/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: random
+Pages read: 932830
+Pages written: 67170
+Page faults: 16508
+Page replacements: 16444
+Execution time in seconds: 0.844950
+
+MATRIZ-2A 64/4096
+Executing file matriz.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: 2a
+Pages read: 932830
+Pages written: 67170
+Page faults: 154352
+Page replacements: 154288
+Execution time in seconds: 23.018983
+---------------------------------------
+SIMULADOR-LRU 64/4096
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: lru
+Pages read: 839017
+Pages written: 160983
+Page faults: 12665
+Page replacements: 12601
+Execution time in seconds: 2.127749
+
+SIMULADOR-FIFO 64/4096
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: fifo
+Pages read: 839017
+Pages written: 160983
+Page faults: 20809
+Page replacements: 20745
+Execution time in seconds: 3.447899
+
+SIMULADOR-RANDOM 64/4096
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: random
+Pages read: 839017
+Pages written: 160983
+Page faults: 21439
+Page replacements: 21375
+Execution time in seconds: 0.926188
+
+SIMULADOR-2A 64/4096
+Executing file simulador.log...
+Memory size (in bytes): 4194304
+Frame size (in bytes): 65536
+Replacement algorithm: 2a
+Pages read: 839017
+Pages written: 160983
+Page faults: 363667
+Page replacements: 363603
+Execution time in seconds: 56.411885
+---------------------------------------
