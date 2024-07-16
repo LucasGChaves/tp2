@@ -171,10 +171,10 @@ long int translateAddress(InvertedPageTable *pageTable, unsigned long int virtua
         }
         
         // Update FIFO and Second Chance
-        PageTableEntry newPage;
+        // PageTableEntry newPage;
 
-        newPage.frameNumber = frameNumber;
-        newPage.valid = 1;
+        // newPage.frameNumber = frameNumber;
+        // newPage.valid = 1;
         //enqueue(fifoQueue, newPage);
         //enqueueSecondChanceQueue(secondChanceQueue, newPage);
 

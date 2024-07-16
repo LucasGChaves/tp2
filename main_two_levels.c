@@ -57,7 +57,7 @@ void processReplacement(FirstLevelPageTable* firstLevelPageTable, char* algorith
 }
 
 unsigned long int translateAddress(FirstLevelPageTable* firstLevelPageTable, unsigned long int levelOffset, unsigned long int offset, unsigned long int virtualAddress, unsigned long int* freeFrames, char* algorithm) {
-    unsigned long int firstLevelIndex = (virtualAddress >> (offset + levelOffset));
+    unsigned long int firstLevelIndex = (virtualAddress >> (offset + levelOffset)) & ((1 << levelOffset) - 1);
     unsigned long int secondLevelIndex = (virtualAddress >> offset) & ((1 << levelOffset) - 1);
     unsigned long int pageOffset = virtualAddress & ((1 << offset) - 1);
 
